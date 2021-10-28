@@ -84,7 +84,6 @@ func (c *Collector) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var response []Payload
 	respPayload, err := c.processRequests(r.Context(), urls)
 	if err != nil {
 		c.errorHandler(w, outcomeErrMsg, http.StatusGatewayTimeout)
@@ -92,9 +91,7 @@ func (c *Collector) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response = respPayload
-
-	payload, err := json.Marshal(response)
+	payload, err := json.Marshal(respPayload)
 	if err != nil {
 		c.errorHandler(w, err.Error(), http.StatusInternalServerError)
 
@@ -109,7 +106,7 @@ func (c *Collector) processRequests(ctx context.Context, urls []string) ([]Paylo
 	rCtx, outCtxCancel := context.WithCancel(ctx)
 	defer outCtxCancel()
 
-	client := http.Client{}
+	client := new(http.Client)
 
 	inChan := make(chan string, len(urls))
 	outChan := make(chan Payload, len(urls))
@@ -128,7 +125,7 @@ func (c *Collector) processRequests(ctx context.Context, urls []string) ([]Paylo
 					return
 
 				default:
-					response, err := request(rCtx, url, &client, c.outTimeout)
+					response, err := request(rCtx, url, client, c.outTimeout)
 					if err != nil {
 						log.Printf("[ERROR][%s] failed perform request: %s", time.Now().Format(time.RFC3339), err)
 						outCtxCancel()
@@ -137,7 +134,6 @@ func (c *Collector) processRequests(ctx context.Context, urls []string) ([]Paylo
 					}
 
 					rp := Payload{URL: url, Payload: string(response)}
-
 					outChan <- rp
 				}
 			}
