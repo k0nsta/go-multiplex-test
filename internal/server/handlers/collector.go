@@ -37,6 +37,8 @@ type Collector struct {
 
 // NewCollector constructs collector handler.
 func NewCollector(maxReq, maxOutConn, maxURLs uint, timeout time.Duration) *Collector {
+	log.Printf("[INFO][%s] request limit: %d, outgoing limit: %d", time.Now().Format(time.RFC3339), maxReq, maxOutConn)
+
 	return &Collector{
 		OutConnPool: int(maxOutConn),
 		MaxURLs:     int(maxURLs),

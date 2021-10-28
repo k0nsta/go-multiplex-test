@@ -31,7 +31,8 @@ func main() {
 	flag.UintVar(&maxConn, "in", defaultMaxConn, "Maximum number of simultaneous client connections, 0 is unlimited")
 	flag.UintVar(&maxOutConn, "out", defaultMaxOutConn, "Maximum number of simultaneous outcoming connections for each client request")
 	flag.UintVar(&maxOutTask, "task", defaultMaxOutTask, "Maximum number of tasks (urls) for each client request")
-	flag.UintVar(&timeout, "timeout", defaultTimeout, "Maximum timeout in seconds for outcoming connection")
+	flag.UintVar(&timeout, "timeout", defaultTimeout, "Maximum timeout in seconds for outcoming connections")
+	flag.Parse()
 
 	router := http.NewServeMux()
 	router.Handle("/collector", handlers.NewCollector(
