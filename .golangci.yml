@@ -1,0 +1,54 @@
+# options for analysis running
+run:
+
+  # timeout for analysis, e.g. 30s, 5m, default is 1m
+  timeout: 5m
+
+  # include test files or not, default is true
+  tests: true
+
+  # Skip default dirs
+  #   vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
+  skip-dirs-use-default: true
+
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
+  # default is "colored-line-number"
+  format: colored-line-number
+
+  # sorts results by: filepath, line and column
+  sort-results: false
+
+# See: https://golangci-lint.run/usage/linters/
+linters:
+  enable:
+    - bodyclose
+    - cyclop
+    - dogsled
+    - dupl
+    - durationcheck
+    - forbidigo
+    - forcetypeassert
+    - funlen
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - gofumpt
+    - gosec
+    - govet
+    - nilerr
+    - nlreturn
+    - predeclared
+    - revive
+    - stylecheck
+    - rowserrcheck
+    - unconvert
+    - wastedassign
+  disable-all: false
+  fast: false
+
+linters-settings:
+  gocritic:
+    disabled-checks:
+      - ifElseChain
